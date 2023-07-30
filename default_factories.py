@@ -6,6 +6,8 @@ from cat_command import CatCommand
 from mkdir_command import MkdirCommand
 from help_command import HelpCommand
 from quit_command import QuitCommand
+from chmod_command import ChmodCommand
+from login_command import LoginCommand
 
 import commands
 
@@ -18,12 +20,14 @@ class DefaultPynixFactory(AbstractPynixFactory):
 
     # make admin group
     fs.groups['admin'] = self.make_user_group('admin')
+    fs.groups['guest'] = self.make_user_group('guest')
 
     # make root directory
     fs.root = self.make_directory("root", 'admin')
 
     # make admin user
-    fs.admin = self.make_user("admin","admin",'admin')
+    fs.users['admin'] = self.make_user("admin","admin",'admin')
+    fs.users['guest'] = self.make_user("guest","guest",'guest')
     return fs
 
   def make_directory(self, name, owner_name):
@@ -56,7 +60,12 @@ class DefaultPynixFactory(AbstractPynixFactory):
     opr['mkdir'] = MkdirCommand()
     opr['help'] = HelpCommand()
     opr['quit'] = QuitCommand()
+    opr['chmod'] = ChmodCommand()
+    opr['login'] = LoginCommand()
     return opr
 
   def make_console(self):
     return DefaultConsole()
+
+  def make_guest(self):
+    return make_user

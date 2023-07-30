@@ -10,11 +10,11 @@ class MkdirCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, args):
+  def execute(self, fac, fs, fsOper, csl, sess, args):
     args.pop(0) # skip command name
-    print('checking path ', args)
+    csl.debug('checking path ', args)
     if not args:
-      print('Error path is empty')
+      csl.error('Error path is empty')
       self.help()
       return
 
@@ -26,7 +26,7 @@ class MkdirCommand(Command):
       if 0 != len(item):
         pathq.append(item)
     if not pathq or pathq[0] != 'root':
-      print('Error path should begin with root')
+      csl.error('Error path should begin with root')
       self.help()
       return
 
@@ -35,16 +35,16 @@ class MkdirCommand(Command):
     isDir = True
     while pathq:
       if cur is None:
-        print('Invalid path')
+        csl.error('Invalid path')
         return
 
       name = pathq.popleft()
       if name is None:
-        print('Invalid path')
+        csl.error('Invalid path')
         return
 
       if not isDir:  
-        print('Path is too long, at position', name)
+        csl.error('Path is too long, at position', name)
         return
 
       if name in cur.childDirectories:
@@ -58,22 +58,17 @@ class MkdirCommand(Command):
           cur = cur.childDirectories[name]
           break
         else:
-          print('Not allowed', pathStr)
+          csl.error('Not allowed', pathStr)
           return
 
-    print('Showing path', pathStr)
-    print('Name', cur.name)
-    print('Owner', cur.owner)
-    print('Permission Of Others', cur.otherUserPermission)
-    if isDir:
-      print('Sub directories', cur.childDirectories.keys())
-      print('Files', cur.childFiles.keys())
-    else: # show content
-      if len(contentStr) > 0:
-        cur.content.append(contentStr)
-      print('Content', cur.content)
-
-    print('============================ Success')
+    csl.echo('Showing path', pathStr)
+    csl.echo('Name', cur.name)
+    csl.echo('Owner', cur.owner)
+    csl.echo('Permission Of Others', cur.otherUserPermission)
+    assert(isDir)
+    csl.echo('Sub directories', cur.childDirectories.keys())
+    csl.echo('Files', cur.childFiles.keys())
+    csl.echo('============================ Success')
 
   def help(self):
     print("SYNOPSIS")

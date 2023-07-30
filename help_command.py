@@ -10,7 +10,7 @@ class HelpCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, args):
+  def execute(self, fac, fs, fsOper, csl, sess, args):
     args.pop(0) # skip command name
     if not args:
       self.help()

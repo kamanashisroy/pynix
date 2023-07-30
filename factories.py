@@ -20,3 +20,6 @@ class AbstractPynixFactory:
 
   def make_console(self):
     pass
+
+  def make_guest(self):
+    pass

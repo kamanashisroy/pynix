@@ -10,7 +10,7 @@ class QuitCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, args):
+  def execute(self, fac, fs, fsOper, csl, sess, args):
     pass
 
   def help(self):

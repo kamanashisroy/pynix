@@ -44,7 +44,6 @@ class FileSystem:
   root    = None  # Directory
   groups  = dict() # UserGroup
   users   = dict() # User
-  admin   = None  # User
 
 
 
