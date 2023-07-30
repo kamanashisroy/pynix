@@ -33,6 +33,7 @@ class File:
   name  = None # string
   owner = None # UserGroup
   otherUserPermission = None # FilePermission
+  content = []
 
 class User:
   name     = None # string

@@ -1,13 +1,9 @@
 
-
-class CdCommand:
-  def __init__(self):
+class Command:
+  def help(self):
     pass
 
-  def execute(self, args):
-    print('TODO')
+  def execute(self, fac, fs, fsOper, csl, args):
+    pass
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\tcd path")
-    print("cd helps to list all the directories and files in a given path.")
+

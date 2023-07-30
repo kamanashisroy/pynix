@@ -1,45 +1,22 @@
 
-from filesystem import FileSystem,User,UserGroup,Directory,File
-import commands
+class AbstractFileSystemFactory:
+  def make_filesystem(self):
+    pass
 
-class FsFactory:
-  @staticmethod
-  def make_filesystem():
-    fs = FileSystem()
+  def make_directory(self, name, owner):
+    pass
 
-    # make admin group
-    fs.groups['admin'] = FsFactory.make_user_group('admin')
+  def make_file(self, name, owner):
+    pass
 
-    # make root directory
-    fs.root = FsFactory.make_directory("root", fs.groups['admin'])
+  def make_user_group(self, name):
+    pass
 
-    # make admin user
-    fs.admin = FsFactory.make_user("admin","admin",fs.groups['admin'])
-    return fs
+  def make_user(self, name,password,grp):
+    pass
 
-  @staticmethod
-  def make_directory(name, owner):
-    dir = Directory()
-    dir.name = name
-    dir.owner = owner
-    return dir
+  def make_filesystem_oper(self):
+    pass
 
-  @staticmethod
-  def make_user_group(name):
-    grp = UserGroup()
-    grp.name = name
-    return grp
-
-  @staticmethod
-  def make_user(name,password,grp):
-    usr = User()
-    usr.name = name
-    usr.password = password
-    usr.group = grp
-    return usr
-
-  @staticmethod
-  def make_filesystem_oper():
-    opr = dict()
-    opr['cd'] = commands.CdCommand()
-    return opr
+  def make_console(self):
+    pass

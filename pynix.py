@@ -1,22 +1,28 @@
 
-import factories
+from default_factories import DefaultFsFactory
 
 class pynix:
   def __init__(self):
-    self.fs = factories.FsFactory.make_filesystem()
-    self.fsOper = factories.FsFactory.make_filesystem_oper()
+    self.fac = DefaultFsFactory()
+    self.fs = self.fac.make_filesystem()
+    self.fsOper = self.fac.make_filesystem_oper()
+    self.csl = self.fac.make_console()
 
   def execute(self, cmd):
     args = cmd.split()
     if args[0] in self.fsOper:
       target = self.fsOper[args[0]]
-      target.execute(args)
+      target.execute(self.fac, self.fs, self.fsOper, self.csl, args)
     else:
       print("Operation not found")
 
+  def prompt(self):
+    self.csl.prompt(self.fsOper.keys())
+    
 if __name__ == "__main__":
   pnx = pynix()
   while True:
+    pnx.prompt()
     cmd = input()
     if cmd == 'quit':
       break
