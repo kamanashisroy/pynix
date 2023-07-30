@@ -28,6 +28,8 @@ Display usage of a command.
 
 #### cat command
 
+Create a README file
+
 ```
 cat /root/README hello
 executing cat /root/README hello
@@ -40,7 +42,17 @@ Content ['hello']
 ============================ Success
 ```
 
+Also read a directory or file.
+
+```
+cat /root
+cat /root/goody
+cat /root/README
+```
+
 #### Mkdir command
+
+Create a goody directory
 
 ```
 mkdir /root/goody
@@ -52,3 +64,22 @@ Owner admin
 Permission Of Others None
 Sub directories dict_keys(['goody'])
 ```
+
+#### Chmod command
+
+Set read,write and execute permission.
+
+```
+chmod /root 0b111
+('Changing permission', '/root')
+('Permission Of Others', 7)
+('============================ Success',)
+```
+
+#### Login command
+
+```
+login admin admin
+('============================ Success',)
+```
+
