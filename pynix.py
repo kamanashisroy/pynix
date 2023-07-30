@@ -1,9 +1,9 @@
 
-from default_factories import DefaultFsFactory
+from default_factories import DefaultPynixFactory
 
 class pynix:
   def __init__(self):
-    self.fac = DefaultFsFactory()
+    self.fac = DefaultPynixFactory()
     self.fs = self.fac.make_filesystem()
     self.fsOper = self.fac.make_filesystem_oper()
     self.csl = self.fac.make_console()

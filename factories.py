@@ -1,5 +1,5 @@
 
-class AbstractFileSystemFactory:
+class AbstractPynixFactory:
   def make_filesystem(self):
     pass
 

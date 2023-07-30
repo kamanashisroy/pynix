@@ -1,6 +1,6 @@
 
 from filesystem import FileSystem,User,UserGroup,Directory,File
-from factories import AbstractFileSystemFactory
+from factories import AbstractPynixFactory
 from default_console import DefaultConsole
 from cat_command import CatCommand
 from mkdir_command import MkdirCommand
@@ -9,7 +9,7 @@ from quit_command import QuitCommand
 
 import commands
 
-class DefaultFsFactory(AbstractFileSystemFactory):
+class DefaultPynixFactory(AbstractPynixFactory):
   def __init__(self):
     pass
 
