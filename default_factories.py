@@ -8,6 +8,7 @@ from help_command import HelpCommand
 from quit_command import QuitCommand
 from chmod_command import ChmodCommand
 from login_command import LoginCommand
+from default_dbm import DefaultDbm
 
 import commands
 
@@ -67,5 +68,5 @@ class DefaultPynixFactory(AbstractPynixFactory):
   def make_console(self):
     return DefaultConsole()
 
-  def make_guest(self):
-    return make_user
+  def make_dbm(self):
+    return DefaultDbm()

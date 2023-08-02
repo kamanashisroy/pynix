@@ -21,5 +21,5 @@ class AbstractPynixFactory:
   def make_console(self):
     pass
 
-  def make_guest(self):
+  def make_dbm(self):
     pass
