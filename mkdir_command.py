@@ -54,6 +54,7 @@ class MkdirCommand(Command):
         isDir = False
       else: # the content is not there
         if not pathq: # has no more content
+          csl.echo('Making directory under', cur.name)
           cur.childDirectories[name] = fac.make_directory(name,cur.owner)
           cur = cur.childDirectories[name]
           break

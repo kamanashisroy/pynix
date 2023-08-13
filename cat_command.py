@@ -54,6 +54,7 @@ class CatCommand(Command):
         isDir = False
       else: # the content is not there
         if not pathq: # has no more content
+          csl.echo('Making file under', cur.name)
           cur.childFiles[name] = fac.make_file(name,cur.owner)
           cur = cur.childFiles[name]
           isDir = False
@@ -67,6 +68,7 @@ class CatCommand(Command):
       csl.echo('Files', cur.childFiles.keys())
     else: # show content
       if len(contentStr) > 0:
+        csl.echo('Appending', contentStr)
         cur.content.append(contentStr)
       csl.echo('Content', cur.content)
     csl.echo('============================ Success')
