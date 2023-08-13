@@ -3,6 +3,9 @@ In memory filesystem
 ====================
 
 It has directories, files and users.
+It also supports persistence.
+
+Please refer to [slides](slides/) for presentations.
 
 How to use
 ============
