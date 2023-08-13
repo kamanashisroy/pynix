@@ -10,12 +10,13 @@ class MkdirCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess, args):
     args.pop(0) # skip command name
+    csl = sess.getConsole()
     csl.debug('checking path ', args)
     if not args:
       csl.error('Error path is empty')
-      self.help()
+      self.help(sess)
       return
 
     pathStr = args[0]
@@ -27,11 +28,11 @@ class MkdirCommand(Command):
         pathq.append(item)
     if not pathq or pathq[0] != 'root':
       csl.error('Error path should begin with root')
-      self.help()
+      self.help(sess)
       return
 
     pathq.popleft()
-    cur = fs.root
+    cur = sess.getFilesystem().root
     isDir = True
     while pathq:
       if cur is None:
@@ -55,7 +56,7 @@ class MkdirCommand(Command):
       else: # the content is not there
         if not pathq: # has no more content
           csl.echo('Making directory under', cur.name)
-          cur.childDirectories[name] = fac.make_directory(name,cur.owner)
+          cur.childDirectories[name] = sess.getFactory().make_directory(name,cur.owner)
           cur = cur.childDirectories[name]
           break
         else:
@@ -71,7 +72,8 @@ class MkdirCommand(Command):
     csl.echo('Files', cur.childFiles.keys())
     csl.echo('============================ Success')
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\tmkdir path")
-    print("helps to create directory")
+  def help(self, sess):
+    csl = sess.getConsole()
+    csl.echo("SYNOPSIS")
+    csl.echo("\t\tmkdir path")
+    csl.echo("helps to create directory")

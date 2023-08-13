@@ -55,7 +55,7 @@ class DefaultPynixFactory(AbstractPynixFactory):
     usr.group = grp
     return usr
 
-  def make_filesystem_oper(self):
+  def make_filesystem_commands(self):
     opr = dict()
     opr['cat'] = CatCommand()
     opr['mkdir'] = MkdirCommand()

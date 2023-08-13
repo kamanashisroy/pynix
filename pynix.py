@@ -1,7 +1,8 @@
 
 from default_factories import DefaultPynixFactory
+from session import Session
 
-class pynix:
+class pynix(Session):
   def __init__(self):
     self.fac = DefaultPynixFactory()
     self.fs = self.fac.make_filesystem()
@@ -9,21 +10,38 @@ class pynix:
     fs = self.dbm.load()
     if fs is not None:
       self.fs = fs
-    self.fsOper = self.fac.make_filesystem_oper()
+    self.cmdLookup = self.fac.make_filesystem_commands()
     self.csl = self.fac.make_console()
-    self.sess = dict()
-    self.sess['usr'] = 'guest'
+    self.usr = 'guest'
+
+  def getFactory(self):
+    return self.fac
+
+  def getFilesystem(self):
+    return self.fs
+
+  def getCommands(self):
+    return self.cmdLookup
+
+  def getConsole(self):
+    return self.csl
+
+  def getUser(self):
+    return self.usr
+
+  def setUser(self, usr):
+    self.usr = usr
 
   def execute(self, cmd):
     args = cmd.split()
-    if args[0] in self.fsOper:
-      target = self.fsOper[args[0]]
-      target.execute(self.fac, self.fs, self.fsOper, self.csl, self.sess, args)
+    if args[0] in self.cmdLookup:
+      target = self.cmdLookup[args[0]]
+      target.execute(self, args)
     else:
       print("Operation not found")
 
   def prompt(self):
-    self.csl.prompt(self.fsOper.keys())
+    self.csl.prompt(self.cmdLookup.keys())
     
   def onQuit(self):
     self.dbm.save(self.fs)

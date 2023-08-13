@@ -10,20 +10,23 @@ class HelpCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess, args):
     args.pop(0) # skip command name
+    csl = sess.getConsole()
     if not args:
-      self.help()
+      self.help(sess)
     else:
       target = args[0]
+      cmdLookup = sess.getCommands()
       if target in fsOper:
-        fsOper[target].help()
+        fsOper[target].help(sess)
       else:
         csl.error('Command not found')
     
-    print('============================ Success')
+    csl.echo('============================ Success')
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\thelp command_name")
-    print("Display usage of a command.")
+  def help(self, sess):
+    csl = sess.getConsole()
+    csl.echo("SYNOPSIS")
+    csl.echo("\t\thelp command_name")
+    csl.echo("Display usage of a command.")

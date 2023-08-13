@@ -10,10 +10,11 @@ class QuitCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess, args):
     pass
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\tquit")
-    print("End script")
+  def help(self, sess):
+    csl = sess.getConsole()
+    csl.echo("SYNOPSIS")
+    csl.echo("\t\tquit")
+    csl.echo("End script")

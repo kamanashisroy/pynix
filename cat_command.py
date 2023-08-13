@@ -1,4 +1,5 @@
 
+from session import Session
 from commands import Command
 from collections import deque
 
@@ -10,8 +11,9 @@ class CatCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess, args):
     args.pop(0) # skip command name
+    csl = sess.getConsole()
     csl.debug('checking path ', args)
     if not args:
       csl.error('Error path is empty')
@@ -19,7 +21,8 @@ class CatCommand(Command):
       return
 
     pathStr = args[0]
-    contentStr = args[1] if len(args) > 1 else ''
+    args.pop(0) # skip path string
+    contentStr = ' '.join(args) if len(args) > 1 else ''
     path = pathStr.split('/')
     pathq = deque()
     for item in path:
@@ -31,7 +34,7 @@ class CatCommand(Command):
       return
 
     pathq.popleft()
-    cur = fs.root
+    cur = sess.getFilesystem().root
     isDir = True
     while pathq:
       if cur is None:
@@ -55,7 +58,7 @@ class CatCommand(Command):
       else: # the content is not there
         if not pathq: # has no more content
           csl.echo('Making file under', cur.name)
-          cur.childFiles[name] = fac.make_file(name,cur.owner)
+          cur.childFiles[name] = sess.getFactory().make_file(name,cur.owner)
           cur = cur.childFiles[name]
           isDir = False
 
@@ -73,7 +76,8 @@ class CatCommand(Command):
       csl.echo('Content', cur.content)
     csl.echo('============================ Success')
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\tcat path_to_file [Added Content]")
-    print("cat lists file or directory content.")
+  def help(self, sess):
+    csl = sess.getConsole()
+    csl.echo("SYNOPSIS")
+    csl.echo("\t\tcat path_to_file [Added Content]")
+    cls.echo("cat lists file or directory content.")

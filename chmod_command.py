@@ -10,12 +10,13 @@ class ChmodCommand(Command):
   def __init__(self):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess, args):
     args.pop(0) # skip command name
+    csl = sess.getConsole()
     csl.debug('checking path ', args)
     if not args:
       csl.error('Error path is empty')
-      self.help()
+      self.help(sess)
       return
 
     pathStr = args[0]
@@ -23,7 +24,7 @@ class ChmodCommand(Command):
     perm = int(permStr,2)
     if len(permStr) == 0 or perm not in (0b0,0b1,0b11,0b111):
       csl.error('Invalid permission')
-      self.help()
+      self.help(sess)
       return
     path = pathStr.split('/')
     pathq = deque()
@@ -32,11 +33,11 @@ class ChmodCommand(Command):
         pathq.append(item)
     if not pathq or pathq[0] != 'root':
       csl.error('Error path should begin with root')
-      self.help()
+      self.help(sess)
       return
 
     pathq.popleft()
-    cur = fs.root
+    cur = sess.getFilesystem().root
     isDir = True
     while pathq:
       if cur is None:
@@ -66,9 +67,10 @@ class ChmodCommand(Command):
     csl.echo('Permission Of Others', cur.otherUserPermission)
     csl.echo('============================ Success')
 
-  def help(self):
-    print("SYNOPSIS")
-    print("\t\tchmod path_to_file perm_flag")
-    print("Perm flag 0b1 = READ.")
-    print("Perm flag 0b11 = READ and WRITE.")
-    print("Perm flag 0b111 = READ and WRITE and EXECUTE.")
+  def help(self, sess):
+    csl = sess.getConsole()
+    csl.echo("SYNOPSIS")
+    csl.echo("\t\tchmod path_to_file perm_flag")
+    csl.echo("Perm flag 0b1 = READ.")
+    csl.echo("Perm flag 0b11 = READ and WRITE.")
+    csl.echo("Perm flag 0b111 = READ and WRITE and EXECUTE.")

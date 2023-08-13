@@ -15,7 +15,7 @@ class AbstractPynixFactory:
   def make_user(self, name,password,grp):
     pass
 
-  def make_filesystem_oper(self):
+  def make_filesystem_commands(self):
     pass
 
   def make_console(self):

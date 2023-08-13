@@ -1,9 +1,9 @@
 
 class Command:
-  def help(self):
+  def help(self, sess):
     pass
 
-  def execute(self, fac, fs, fsOper, csl, sess, args):
+  def execute(self, sess):
     pass
 
 
