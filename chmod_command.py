@@ -20,7 +20,12 @@ class ChmodCommand(Command):
       return
 
     pathStr = args[0]
-    permStr = args[1] if len(args) > 1 else ''
+    if pathStr == '.': # in case current directory
+      pathStr = ''
+    if not pathStr or pathStr[0] != '/':
+      pathStr = sess.getPwd() + pathStr
+
+    permStr = args[1] if len(args) > 0 else ''
     perm = int(permStr,2)
     if len(permStr) == 0 or perm not in (0b0,0b1,0b11,0b111):
       csl.error('Invalid permission')
@@ -31,12 +36,7 @@ class ChmodCommand(Command):
     for item in path:
       if 0 != len(item):
         pathq.append(item)
-    if not pathq or pathq[0] != 'root':
-      csl.error('Error path should begin with root')
-      self.help(sess)
-      return
 
-    pathq.popleft()
     cur = sess.getFilesystem().root
     isDir = True
     while pathq:

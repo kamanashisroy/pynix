@@ -25,15 +25,20 @@ class UserGroup:
 class Directory:
   name  = None # string
   owner = None # UserGroup
-  childDirectories = dict()
-  childFiles = dict()
+  childDirectories = None
+  childFiles = None
   otherUserPermission = None
+  def __init__(self):
+    self.childFiles = dict()
+    self.childDirectories = dict()
 
 class File:
   name  = None # string
   owner = None # UserGroup
   otherUserPermission = None # FilePermission
-  content = []
+  content = None
+  def __init__(self):
+    self.content = []
 
 class User:
   name     = None # string
@@ -42,9 +47,11 @@ class User:
 
 class FileSystem:
   root    = None  # Directory
-  groups  = dict() # UserGroup
-  users   = dict() # User
-
+  groups  = None # UserGroup
+  users   = None # User
+  def __init__(self):
+    self.groups = dict()
+    self.users = dict()
 
 
 

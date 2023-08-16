@@ -3,9 +3,9 @@ from session import Session
 from commands import Command
 from collections import deque
 
-class CatCommand(Command):
+class LsCommand(Command):
   '''
-  \brief Allow Read/Write files
+  \brief Show directory content
   
   '''
   def __init__(self):
@@ -15,15 +15,14 @@ class CatCommand(Command):
     args.pop(0) # skip command name
     csl = sess.getConsole()
     csl.debug('checking path ', args)
+
     pathStr = ''
     if args:
       pathStr = args[0]
-      args.pop(0) # skip path string
 
     if not pathStr or pathStr[0] != '/':
       pathStr = sess.getPwd() + pathStr
 
-    contentStr = ' '.join(args) if len(args) > 0 else ''
     path = pathStr.split('/')
     pathq = deque()
     for item in path:
@@ -53,9 +52,6 @@ class CatCommand(Command):
         isDir = False
       else: # the content is not there
         if not pathq: # has no more content
-          csl.echo('Making file under', cur.name)
-          cur.childFiles[name] = sess.getFactory().make_file(name,sess.usr)
-          cur = cur.childFiles[name]
           isDir = False
 
     csl.echo('Showing path', pathStr)
@@ -66,14 +62,11 @@ class CatCommand(Command):
       csl.echo('Sub directories', cur.childDirectories.keys())
       csl.echo('Files', cur.childFiles.keys())
     else: # show content
-      if len(contentStr) > 0:
-        csl.echo('Appending', contentStr)
-        cur.content.append(contentStr)
       csl.echo('Content', cur.content)
     csl.echo('============================ Success')
 
   def help(self, sess):
     csl = sess.getConsole()
     csl.echo("SYNOPSIS")
-    csl.echo("\t\tcat path_to_file [Added Content]")
-    csl.echo("cat lists file or directory content.")
+    csl.echo("\t\tls path_to_directory")
+    csl.echo("ls lists file or directory content.")

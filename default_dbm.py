@@ -95,7 +95,7 @@ class DefaultDbm(AbstractDbm):
 
   def save(self, fs):
 
-    def dumpFileSystem(obj):
+    def objToDict(obj):
       out = dict()
       if isinstance(obj, FileSystem):
         out['cls'] = "FileSystem"
@@ -126,5 +126,5 @@ class DefaultDbm(AbstractDbm):
       print(out, out.__class__)
       return out 
     with open('fs.txt','w') as outfile:
-        json.dump(fs, outfile, default=dumpFileSystem)
+        json.dump(fs, outfile, default=objToDict)
     return None

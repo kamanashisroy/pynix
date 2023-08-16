@@ -10,7 +10,10 @@ class Session(dict):
     pass
   def getUser(self):
     pass
-  def setUser(self, usr):
+  def setUser(self, usr:str):
     pass
-
+  def getPwd(self):
+    pass
+  def setPwd(self, path:str):
+    pass
 

@@ -9,8 +9,8 @@ class DefaultConsole(Console):
     #print(args);
     pass
 
-  def prompt(self, *args):
-    print('pynix >', *args)
+  def prompt(self, prefix, *args):
+    print('pynix [', prefix,'] >', *args)
 
   def error(self, *args):
     print('***',*args)

@@ -8,6 +8,8 @@ from help_command import HelpCommand
 from quit_command import QuitCommand
 from chmod_command import ChmodCommand
 from login_command import LoginCommand
+from ls_command import LsCommand
+from pwd_command import PwdCommand
 from default_dbm import DefaultDbm
 
 import commands
@@ -63,6 +65,8 @@ class DefaultPynixFactory(AbstractPynixFactory):
     opr['quit'] = QuitCommand()
     opr['chmod'] = ChmodCommand()
     opr['login'] = LoginCommand()
+    opr['ls'] = LsCommand()
+    opr['pwd'] = PwdCommand()
     return opr
 
   def make_console(self):

@@ -20,18 +20,16 @@ class MkdirCommand(Command):
       return
 
     pathStr = args[0]
-    contentStr = args[1] if len(args) > 1 else ''
+
+    if not pathStr or pathStr[0] != '/':
+      pathStr = sess.getPwd() + pathStr
+
     path = pathStr.split('/')
     pathq = deque()
     for item in path:
       if 0 != len(item):
         pathq.append(item)
-    if not pathq or pathq[0] != 'root':
-      csl.error('Error path should begin with root')
-      self.help(sess)
-      return
 
-    pathq.popleft()
     cur = sess.getFilesystem().root
     isDir = True
     while pathq:
@@ -56,7 +54,7 @@ class MkdirCommand(Command):
       else: # the content is not there
         if not pathq: # has no more content
           csl.echo('Making directory under', cur.name)
-          cur.childDirectories[name] = sess.getFactory().make_directory(name,cur.owner)
+          cur.childDirectories[name] = sess.getFactory().make_directory(name,sess.usr)
           cur = cur.childDirectories[name]
           break
         else:

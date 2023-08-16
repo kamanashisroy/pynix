@@ -21,6 +21,7 @@ class LoginCommand(Command):
     name = args[0]
     pwd = args[1]
 
+    fs  = sess.getFilesystem()
     if name not in fs.users:
       csl.error('User not found')
       self.help(sess)
@@ -32,7 +33,7 @@ class LoginCommand(Command):
       self.help(sess)
       return
 
-    sess.setUser(usr)
+    sess.setUser(usr.name)
     csl.echo('============================ Success')
 
   def help(self, sess):

@@ -13,6 +13,7 @@ class pynix(Session):
     self.cmdLookup = self.fac.make_filesystem_commands()
     self.csl = self.fac.make_console()
     self.usr = 'guest'
+    self.pwd = '/'
 
   def getFactory(self):
     return self.fac
@@ -32,6 +33,12 @@ class pynix(Session):
   def setUser(self, usr):
     self.usr = usr
 
+  def getPwd(self):
+    return self.pwd
+
+  def setPwd(self, path:str):
+    self.pwd = path
+
   def execute(self, cmd):
     args = cmd.split()
     if args[0] in self.cmdLookup:
@@ -41,7 +48,7 @@ class pynix(Session):
       print("Operation not found")
 
   def prompt(self):
-    self.csl.prompt(self.cmdLookup.keys())
+    self.csl.prompt(self.usr, self.cmdLookup.keys())
     
   def onQuit(self):
     self.dbm.save(self.fs)

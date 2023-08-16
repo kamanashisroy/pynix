@@ -18,8 +18,8 @@ class HelpCommand(Command):
     else:
       target = args[0]
       cmdLookup = sess.getCommands()
-      if target in fsOper:
-        fsOper[target].help(sess)
+      if target in cmdLookup:
+        cmdLookup[target].help(sess)
       else:
         csl.error('Command not found')
     
