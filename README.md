@@ -155,6 +155,19 @@ login admin admin
 pynix [ admin ] > dict_keys(['cat', 'mkdir', 'help', 'quit', 'chmod', 'login', 'ls', 'pwd'])
 ```
 
+#### Rm command
+
+```
+rm /goody/fruit        
+('Showing path', '/goody/fruit')
+('Name', 'fruit')
+('Owner', 'guest')
+('Permission Of Others', None)
+('Content', ['Apple'])
+('Deleting', 'fruit')
+('============================ Success',)
+```
+
 #### Persistence
 
 Data is written upon `quit` command.

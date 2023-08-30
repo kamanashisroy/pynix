@@ -10,6 +10,8 @@ from chmod_command import ChmodCommand
 from login_command import LoginCommand
 from ls_command import LsCommand
 from pwd_command import PwdCommand
+from rm_command import RmCommand
+from rmdir_command import RmdirCommand
 from default_dbm import DefaultDbm
 
 import commands
@@ -67,6 +69,8 @@ class DefaultPynixFactory(AbstractPynixFactory):
     opr['login'] = LoginCommand()
     opr['ls'] = LsCommand()
     opr['pwd'] = PwdCommand()
+    opr['rmdir'] = RmdirCommand()
+    opr['rm'] = RmCommand()
     return opr
 
   def make_console(self):

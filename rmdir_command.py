@@ -2,7 +2,7 @@
 from commands import Command
 from collections import deque
 
-class MkdirCommand(Command):
+class RmdirCommand(Command):
   '''
   \brief Allow Make directory
   
@@ -30,8 +30,8 @@ class MkdirCommand(Command):
       if 0 != len(item):
         pathq.append(item)
 
+    parent = None
     cur = sess.getFilesystem().root
-    isDir = True
     while pathq:
       if cur is None:
         csl.error('Invalid path')
@@ -42,36 +42,32 @@ class MkdirCommand(Command):
         csl.error('Invalid path')
         return
 
-      if not isDir:
-        csl.error('Path is too long, at position', name)
-        return
-
       if name in cur.childDirectories:
+        parent = cur
         cur = cur.childDirectories[name]
       elif name in cur.childFiles:
-        cur = cur.childFiles[name]
-        isDir = False
+        csl.error('Path contains a file', pathStr)
+        return
       else: # the content is not there
-        if not pathq: # has no more content
-          csl.echo('Making directory under', cur.name)
-          cur.childDirectories[name] = sess.getFactory().make_directory(name,sess.usr)
-          cur = cur.childDirectories[name]
-          break
-        else:
-          csl.error('Not allowed', pathStr)
-          return
+        csl.error('Directory not found', pathStr)
+        return
+
+    if parent is None:
+      csl.echo('Cannot delete root directory')
+      return
 
     csl.echo('Showing path', pathStr)
     csl.echo('Name', cur.name)
     csl.echo('Owner', cur.owner)
     csl.echo('Permission Of Others', cur.otherUserPermission)
-    assert(isDir)
     csl.echo('Sub directories', cur.childDirectories.keys())
     csl.echo('Files', cur.childFiles.keys())
+    csl.echo('Deleting', cur.name)
+    del parent.childDirectories[cur.name]
     csl.echo('============================ Success')
 
   def help(self, sess):
     csl = sess.getConsole()
     csl.echo("SYNOPSIS")
-    csl.echo("\t\tmkdir path")
-    csl.echo("helps to create directory")
+    csl.echo("\t\trmdir path")
+    csl.echo("helps to remove directory")
