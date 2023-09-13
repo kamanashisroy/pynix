@@ -29,6 +29,29 @@ help
 ('============================ Success',)
 ```
 
+#### pwd command
+
+`pwd` provides the current directory path
+
+```
+pwd
+('Current directory', '/goody/assorted')
+('============================ Success',)
+```
+
+#### cd command
+
+`cd` command can be use the change directory.
+
+```
+cd ../
+('Current directory', '/goody/assorted')
+('Changing current path to', '/goody')
+('Name', 'goody')
+('Owner', 'guest')
+('Permission Of Others', None)
+```
+
 #### Mkdir command
 
 
@@ -155,6 +178,8 @@ login admin admin
 pynix [ admin ] > dict_keys(['cat', 'mkdir', 'help', 'quit', 'chmod', 'login', 'ls', 'pwd'])
 ```
 
+Currently there are 'guest' and 'admin' users.
+
 #### Rm command
 
 ```
@@ -186,4 +211,17 @@ quit
 ```
 
 Data is saved in 'fs.txt' file in JSON format.
+
+#### Permission
+
+We can set permission using "chmod". In case the user does not have permission, it will not allow access.
+
+For example , guest does not have access to '/goody/restricted' directory.
+
+```
+pynix [ guest ] > dict_keys(['cat', 'mkdir', 'help', 'quit', 'chmod', 'login', 'ls', 'pwd', 'rmdir', 'rm', 'cd'])
+cd restricted
+('Current directory', '/goody')
+*** Permission denied restricted
+```
 

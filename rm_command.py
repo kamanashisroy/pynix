@@ -2,6 +2,7 @@
 from commands import Command
 from collections import deque
 from pathtools import PathUtil
+from permtools import PermUtil
 
 class RmCommand(Command):
   '''
@@ -24,6 +25,9 @@ class RmCommand(Command):
     path = PathUtil(sess.getPwd(), pathStr)
     pathq = path.pathq.copy()
     abspath = path.absolute_path()
+    usr = sess.getUser()
+    usr_grp = sess.getFilesystem().users[usr].group
+    perm = PermUtil(usr, usr_grp)
 
     isDir = True
     parent = None
@@ -45,9 +49,15 @@ class RmCommand(Command):
       if name in cur.childDirectories:
         parent = cur
         cur = cur.childDirectories[name]
+        if not perm.has_write_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
       elif name in cur.childFiles:
         parent = cur
         cur = cur.childFiles[name]
+        if not perm.has_write_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
         isDir = False
       else: # the content is not there
         csl.error('Directory not found', pathStr)

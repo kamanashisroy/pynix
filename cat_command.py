@@ -3,6 +3,7 @@ from session import Session
 from commands import Command
 from collections import deque
 from pathtools import PathUtil
+from permtools import PermUtil
 
 class CatCommand(Command):
   '''
@@ -24,6 +25,9 @@ class CatCommand(Command):
     path = PathUtil(sess.getPwd(), pathStr)
     pathq = path.pathq.copy()
     abspath = path.absolute_path()
+    usr = sess.getUser()
+    usr_grp = sess.getFilesystem().users[usr].group
+    perm = PermUtil(usr, usr_grp)
     contentStr = ' '.join(args) if len(args) > 0 else ''
 
     cur = sess.getFilesystem().root
@@ -44,8 +48,14 @@ class CatCommand(Command):
 
       if name in cur.childDirectories:
         cur = cur.childDirectories[name]
+        if not perm.has_write_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
       elif name in cur.childFiles:
         cur = cur.childFiles[name]
+        if not perm.has_write_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
         isDir = False
       else: # the content is not there
         if not pathq: # has no more content
