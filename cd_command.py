@@ -1,11 +1,12 @@
 
+from session import Session
 from commands import Command
 from collections import deque
 from pathtools import PathUtil
 
-class MkdirCommand(Command):
+class CdCommand(Command):
   '''
-  \brief Allow Make directory
+  \brief Change directory
   
   '''
   def __init__(self):
@@ -14,13 +15,12 @@ class MkdirCommand(Command):
   def execute(self, sess, args):
     args.pop(0) # skip command name
     csl = sess.getConsole()
-    csl.debug('checking path ', args)
-    if not args:
-      csl.error('Error path is empty')
-      self.help(sess)
-      return
+    csl.echo('Current directory', sess.getPwd())
 
-    pathStr = args[0]
+    pathStr = ''
+    if args:
+      pathStr = args[0]
+
     path = PathUtil(sess.getPwd(), pathStr)
     pathq = path.pathq.copy()
     abspath = path.absolute_path()
@@ -37,7 +37,7 @@ class MkdirCommand(Command):
         csl.error('Invalid path')
         return
 
-      if not isDir:
+      if not isDir:  
         csl.error('Path is too long, at position', name)
         return
 
@@ -45,28 +45,20 @@ class MkdirCommand(Command):
         cur = cur.childDirectories[name]
       elif name in cur.childFiles:
         cur = cur.childFiles[name]
-        isDir = False
+        csl.error('path is not a valid directory', pathStr)
+        return
       else: # the content is not there
-        if not pathq: # has no more content
-          csl.echo('Making directory under', cur.name)
-          cur.childDirectories[name] = sess.getFactory().make_directory(name,sess.usr)
-          cur = cur.childDirectories[name]
-          break
-        else:
-          csl.error('Not allowed', pathStr)
-          return
+        csl.error('Path is too long, at position', name)
+        return
 
-    csl.echo('Showing path', pathStr)
+    csl.echo('Changing current path to', abspath)
     csl.echo('Name', cur.name)
     csl.echo('Owner', cur.owner)
     csl.echo('Permission Of Others', cur.otherUserPermission)
-    assert(isDir)
-    csl.echo('Sub directories', cur.childDirectories.keys())
-    csl.echo('Files', cur.childFiles.keys())
-    csl.echo('============================ Success')
+    sess.setPwd(abspath)
 
   def help(self, sess):
     csl = sess.getConsole()
     csl.echo("SYNOPSIS")
-    csl.echo("\t\tmkdir path")
-    csl.echo("helps to create directory")
+    csl.echo("\t\tcd [target directory]")
+    csl.echo("Change directory.")

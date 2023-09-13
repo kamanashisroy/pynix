@@ -2,6 +2,8 @@
 from session import Session
 from commands import Command
 from collections import deque
+from pathtools import PathUtil
+
 
 class LsCommand(Command):
   '''
@@ -20,14 +22,9 @@ class LsCommand(Command):
     if args:
       pathStr = args[0]
 
-    if not pathStr or pathStr[0] != '/':
-      pathStr = sess.getPwd() + pathStr
-
-    path = pathStr.split('/')
-    pathq = deque()
-    for item in path:
-      if 0 != len(item):
-        pathq.append(item)
+    path = PathUtil(sess.getPwd(), pathStr)
+    pathq = path.pathq.copy()
+    abspath = path.absolute_path()
 
     cur = sess.getFilesystem().root
     isDir = True

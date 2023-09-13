@@ -12,6 +12,7 @@ from ls_command import LsCommand
 from pwd_command import PwdCommand
 from rm_command import RmCommand
 from rmdir_command import RmdirCommand
+from cd_command import CdCommand
 from default_dbm import DefaultDbm
 
 import commands
@@ -71,6 +72,7 @@ class DefaultPynixFactory(AbstractPynixFactory):
     opr['pwd'] = PwdCommand()
     opr['rmdir'] = RmdirCommand()
     opr['rm'] = RmCommand()
+    opr['cd'] = CdCommand()
     return opr
 
   def make_console(self):

@@ -2,6 +2,7 @@
 from session import Session
 from commands import Command
 from collections import deque
+from pathtools import PathUtil
 
 class CatCommand(Command):
   '''
@@ -20,15 +21,10 @@ class CatCommand(Command):
       pathStr = args[0]
       args.pop(0) # skip path string
 
-    if not pathStr or pathStr[0] != '/':
-      pathStr = sess.getPwd() + pathStr
-
+    path = PathUtil(sess.getPwd(), pathStr)
+    pathq = path.pathq.copy()
+    abspath = path.absolute_path()
     contentStr = ' '.join(args) if len(args) > 0 else ''
-    path = pathStr.split('/')
-    pathq = deque()
-    for item in path:
-      if 0 != len(item):
-        pathq.append(item)
 
     cur = sess.getFilesystem().root
     isDir = True

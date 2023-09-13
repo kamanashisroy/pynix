@@ -5,7 +5,7 @@ from collections import deque
 
 class PwdCommand(Command):
   '''
-  \brief Allow Read/Write files
+  \brief Show current path
   
   '''
   def __init__(self):

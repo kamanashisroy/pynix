@@ -1,6 +1,7 @@
 
 from commands import Command
 from collections import deque
+from pathtools import PathUtil
 
 class RmdirCommand(Command):
   '''
@@ -20,15 +21,9 @@ class RmdirCommand(Command):
       return
 
     pathStr = args[0]
-
-    if not pathStr or pathStr[0] != '/':
-      pathStr = sess.getPwd() + pathStr
-
-    path = pathStr.split('/')
-    pathq = deque()
-    for item in path:
-      if 0 != len(item):
-        pathq.append(item)
+    path = PathUtil(sess.getPwd(), pathStr)
+    pathq = path.pathq.copy()
+    abspath = path.absolute_path()
 
     parent = None
     cur = sess.getFilesystem().root
