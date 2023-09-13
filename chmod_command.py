@@ -1,6 +1,8 @@
 
 from commands import Command
 from collections import deque
+from pathtools import PathUtil
+from permtools import PermUtil
 
 class ChmodCommand(Command):
   '''
@@ -20,10 +22,12 @@ class ChmodCommand(Command):
       return
 
     pathStr = args[0]
-    if pathStr == '.': # in case current directory
-      pathStr = ''
-    if not pathStr or pathStr[0] != '/':
-      pathStr = sess.getPwd() + pathStr
+    path = PathUtil(sess.getPwd(), pathStr)
+    pathq = path.pathq.copy()
+    abspath = path.absolute_path()
+    usr = sess.getUser()
+    usr_grp = sess.getFilesystem().users[usr].group
+    permGuard = PermUtil(usr, usr_grp)
 
     permStr = args[1] if len(args) > 0 else ''
     perm = int(permStr,2)
@@ -31,11 +35,6 @@ class ChmodCommand(Command):
       csl.error('Invalid permission')
       self.help(sess)
       return
-    path = pathStr.split('/')
-    pathq = deque()
-    for item in path:
-      if 0 != len(item):
-        pathq.append(item)
 
     cur = sess.getFilesystem().root
     isDir = True
@@ -55,8 +54,14 @@ class ChmodCommand(Command):
 
       if name in cur.childDirectories:
         cur = cur.childDirectories[name]
+        if not permGuard.has_chmod_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
       elif name in cur.childFiles:
         cur = cur.childFiles[name]
+        if not permGuard.has_chmod_access(cur):
+          csl.error('Permission denied', pathStr)
+          return
         isDir = False
       else: # the content is not there
         csl.error('Invalid path')
